@@ -25,6 +25,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afekavote.application.BaseFragment;
 import com.afekavote.application.Program;
 import com.afekavote.communication.ClientInterface;
 import com.afekavote.communication.volly.VollyClinet;
@@ -38,9 +39,10 @@ import com.gameframwork.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-public class VoteFrag extends Fragment implements OnClickListener{
+public class VoteFrag extends BaseFragment implements OnClickListener{
 
 	private static String TAG = "VoteFrag";
+	public static final String ARG_APP_NAME = "application_name";
 	private TextView tvAppName;
 	private VoteAdapter voteAdapter;
 	private Button bDone;
@@ -58,7 +60,8 @@ public class VoteFrag extends Fragment implements OnClickListener{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.vote_frag, container, false);
-//		Log.e(TAG, "onCreateView");
+		int color = getArguments().getInt(MemoryKeys.BACK_COLOR);
+		view.setBackgroundResource(color);
 		getLayoutRes(view);
 		initRes(view);
 		return view;
@@ -89,12 +92,12 @@ public class VoteFrag extends Fragment implements OnClickListener{
 		}
 	}
 
-	public void initFrag(String appName) {
+	public void setFragName(String appName) {
 		this.appName = appName;
 		TAG += appName;
 	}
 
-	public String getFragAppName(){
+	public String getFragName(){
 		return appName;
 	}
 	
@@ -107,7 +110,9 @@ public class VoteFrag extends Fragment implements OnClickListener{
 			text += vote.getCategory()+"- "+ vote.getGrade();
 			votes.put(vote.getCategory(), vote.getGrade());
 		}
-		Toast.makeText(getActivity(), text, Toast.LENGTH_LONG).show();
+		Logger.log(TAG, text);
+		Logger.shortToast("request sent");
+//		Toast.makeText(getActivity(), text, Toast.LENGTH_LONG).show();
 		manager.saveApp(appName, votes);
 		client.voteForApp(appName, votes, new voteResponse());
 	}
@@ -117,16 +122,16 @@ public class VoteFrag extends Fragment implements OnClickListener{
 		@Override
 		public void onResponse(String response) {
 			Logger.log("response:" + response+"!!");
-//			try {
-//				JSONObject jsonResponse = new JSONObject(response);
-//				if (jsonResponse.getBoolean(MemoryKeys.API_SUCCESS) && 
-//						(jsonResponse.getString(MemoryKeys.API_TAG).equals(MemoryKeys.API_VOTE_TAG))){
-//					Logger.longToast(appName +" saved to DB");
-//				}
-//			} catch (JSONException e) {
-//				Logger.log("JSONException: " + e.getMessage());
-//				ErrorDialog.showResponseError();
-//			}
+			try {
+				JSONObject jsonResponse = new JSONObject(response);
+				if (jsonResponse.getBoolean(MemoryKeys.API_SUCCESS) && 
+						(jsonResponse.getString(MemoryKeys.API_TAG).equals(MemoryKeys.API_VOTE_TAG))){
+					Logger.longToast("your vote for "+appName+" has been submited");
+				}
+			} catch (JSONException e) {
+				Logger.log("JSONException: " + e.getMessage());
+				ErrorDialog.showResponseError();
+			}
 		}
 	}
 

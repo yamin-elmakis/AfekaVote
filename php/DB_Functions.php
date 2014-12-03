@@ -1,5 +1,13 @@
 <?php
 
+define('VOTERS_COUNT',  "voters_count");
+define('SUCCESS',       "success");
+define('VOTED_APPS_COUNT',    "apps_count");
+define('MIN_VOTERS',    "min_voters");
+define('MUN_OF_APPS',   "num_apps");
+define('VOTERS_COUNT',   "voters_count");
+
+
 class DB_Functions {
 
     private $db;
@@ -7,7 +15,7 @@ class DB_Functions {
     //put your code here
     // constructor
     function __construct() {     
-    // require_once 'DB_Connect.php';
+
     include('db_connect.php');
         // connecting to database
         $this->db = new DB_Connect();
@@ -16,7 +24,38 @@ class DB_Functions {
 
     // destructor
     function __destruct() {   }
-     
+    
+    /**
+    * get the grade of each app in this contest
+    */
+    public function getAppsGrades($year, $semester, $class) {
+        $result = mysql_query("SELECT app_name , sum(grade) as grade from app_votes WHERE year = '$year' AND class_name = '$class' AND semester = '$semester' GROUP BY app_name");
+        $no_of_rows = mysql_num_rows($result);
+        if ($no_of_rows > 0) {
+            $appsGrades = array();
+            while($res = mysql_fetch_assoc($result)) {
+                $appsGrades[$res['app_name']] = $res['grade'];
+            }
+            return $appsGrades; 
+        } else {
+            return false;
+        }
+    }
+
+    /**
+    * get the number of voter in this specific contest
+    */
+    public function getAppsVotersCount($year, $semester, $class) {
+        $result = mysql_query("SELECT count(distinct(app_name)) as ".VOTED_APPS_COUNT.", count(distinct(phone_id)) as ".VOTERS_COUNT." from app_votes WHERE year = '$year' AND class_name = '$class' AND semester = '$semester'");
+        $no_of_rows = mysql_num_rows($result);
+        if ($no_of_rows > 0) {
+            $res = mysql_fetch_assoc($result);
+            return $res;  
+        } else {
+            return false;
+        }
+    }
+
      /**
      * get the min munber of voters in a specific class
      */
@@ -44,6 +83,20 @@ class DB_Functions {
                 $apps[] = $res['app_name'];
             }
             return $apps;   
+        } else {
+            return false;
+        }
+    }
+
+/**
+     * get the apps names in this contest
+     */
+    public function getAppsCount($year, $semester, $class) {
+        $result = mysql_query("SELECT count(app_name) as ".MUN_OF_APPS." from apps_names WHERE year = '$year' AND class_name = '$class' AND semester = '$semester' ");
+        $no_of_rows = mysql_num_rows($result);
+        if ($no_of_rows > 0) {
+            $res = mysql_fetch_assoc($result);
+            return $res[MUN_OF_APPS];    
         } else {
             return false;
         }
@@ -82,51 +135,6 @@ class DB_Functions {
             // user not existed
             return false;
         }
-    }
-
-
-    /**
-     * Storing new song counter
-     * returns song details
-     */
-    public function setNewSongCounter($id,$counter) {
-
-        $result = mysql_query("INSERT INTO song_counter(id,counter) VALUES('$id','$counter')");
-        // check for successful store
-        if ($result) {
-            // get song counter details 
-          //  $id = mysql_insert_id(); // last inserted id
-        //  echo $id ;
-            $result = mysql_query("SELECT * FROM song_counter WHERE id = '$id' ");
-            // return user details
-            return mysql_fetch_array($result);
-        } else {
-            return false;
-        }
-    }
-    
-    /**
-     * Encrypting password
-     * @param password
-     * returns salt and encrypted password
-     */
-    public function hashSSHA($password) {
-
-        $salt = sha1(rand());
-        $salt = substr($salt, 0, 10);
-        $encrypted = base64_encode(sha1($password . $salt, true) . $salt);
-        $hash = array("salt" => $salt, "encrypted" => $encrypted);
-        return $hash;
-    }
-
-    /**
-     * Decrypting password
-     * @param salt, password
-     * returns hash string
-     */
-    public function checkhashSSHA($salt, $password) {
-        $hash = base64_encode(sha1($password . $salt, true) . $salt);
-        return $hash;
     }
 }
 

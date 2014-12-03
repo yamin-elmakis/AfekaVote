@@ -72,13 +72,27 @@ public class VollyClinet implements ClientInterface{
 	}
 
 	@Override
+	public boolean getAppsGrades(Listener<String> listener) {
+		Map<String, String> params = getBasicParams();
+		params.put(MemoryKeys.API_TAG, MemoryKeys.API_GET_GRADES);
+		return sendStringRequest(MemoryKeys.API_FILE, params, listener, createReqErrorListener());
+	}
+
+	@Override
+	public boolean checkStatus(Listener<String> listener) {
+		Map<String, String> params = getBasicParams();
+		params.put(MemoryKeys.API_TAG, MemoryKeys.API_CHECK_STATUS);
+		return sendStringRequest(MemoryKeys.API_FILE, params, listener, createReqErrorListener());
+	}
+
+	@Override
 	public boolean voteForApp(String appName, HashMap<String, Integer> catgVotes, Listener<String> listener) {
 		Map<String, String> params = getBasicParams();
 		params.put(MemoryKeys.API_TAG, MemoryKeys.API_VOTE_TAG);
 		params.put(MemoryKeys.API_APP_NAME, appName);
 		Gson gson = new Gson();
 		String votesSTR = gson.toJson(catgVotes);
-		Log.e(TAG,"votesSTR: "+votesSTR );
+		Logger.log(TAG,"votesSTR: "+votesSTR );
 		params.put(MemoryKeys.API_VOTES, votesSTR);
 		return sendStringRequest(MemoryKeys.API_FILE, params, listener, createReqErrorListener());
 	}

@@ -21,8 +21,14 @@ class DB_CONNECT {
      * Function to connect with database
      */
     function connect() {
-        // import database connection variables
-        // require_once __DIR__ . '/db_config.php';
+        /** import database connection variables
+         require_once __DIR__ . '/db_config.php';
+		 define this in db_config.php
+		define('DB_USER', 		"XX"); 	// db user
+		define('DB_PASSWORD', 	"XX"); 	// db password 
+		define('DB_DATABASE', 	"XX"); 	// database name
+		define('DB_SERVER', 	"XX"); 	// db server
+		*/
         include('db_config.php');
 
         // Connecting to mysql database

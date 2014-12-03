@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_weighted_seek_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+                style="@style/layout_padding_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal"
+                android:weightSum="3" >
+
+                <TextView
+                    android:id="@+id/grade_tv_app_name"
+                    style="@style/text_lables"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:layout_gravity="center"
+                    android:text="app name" />
+
+                <RelativeLayout 
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent" 
+                    android:layout_weight="2">
+
+                    <ProgressBar
+                        android:id="@+id/grade_pb_grade"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:progressDrawable="@drawable/custom_progress" />
+
+                    <TextView
+                        android:id="@+id/grade_tv_grade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="@android:color/black"
+                        android:fontFamily="sans-serif-light"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                </RelativeLayout >
+
+            </LinearLayout>
+
+</LinearLayout>

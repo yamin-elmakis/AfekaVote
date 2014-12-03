@@ -43,6 +43,10 @@ public class DataManager {
 	public int getAppCategory(String appKey){
 		return memoryPref.getAppCategory(appKey);
 	}
+	
+	public void cleanData(){
+		memoryPref.clearAll();
+	}
 	// **************************************************************
 
 	

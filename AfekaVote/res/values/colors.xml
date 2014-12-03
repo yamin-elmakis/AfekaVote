@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <color name="transperent_black">#d72c2c2c</color>
+     <color name="transperent_red">#f7ec6e58</color>
+     <drawable name="semitransparent_orange">#77f2c15b</drawable>
+     <color name="white">#ffffff</color>
+     <color name="azure_clear">#550cb4fa</color>
+     <color name="azure_clear2">#05648c</color>
+     <color name="pink">#a5f2b4eb</color>
+     <color name="pink2">#d602c0</color>
+     <color name="yellow">#dbdfa4</color>
+     <color name="yellow2">#d4df1d</color>
+     <color name="blue">#5e2077ee</color>
+     <color name="blue2">#0455bb</color>
+     <color name="azure">#9e35B5E5</color>
+     <color name="azure2">#048ebc</color>
+     <color name="azure3">#01a5c1</color>
+     <drawable name="orange">#669900</drawable>
+     <drawable name="red">#FF4444</drawable>
+</resources>

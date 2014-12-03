@@ -7,7 +7,7 @@ import com.afekavote.application.Program;
 
 public class Logger {
 
-	private static boolean isLoggerOn = true;
+	private static boolean isLoggerOn = false;
 	
 	public static void log (String log){
 		if (!isLoggerOn)

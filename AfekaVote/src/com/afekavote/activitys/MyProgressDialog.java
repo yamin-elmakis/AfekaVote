@@ -10,11 +10,7 @@ public class MyProgressDialog {
 	private MyProgressDialog() { /* no instances */ }
 
 	public static void showDialog() {
-		pDialog = new ProgressDialog(Program.getCurActivity());
-		pDialog.setMessage("Please wait...");
-		pDialog.setIndeterminate(false);
-		pDialog.setCancelable(false);
-		pDialog.show();
+		showDialog("Please wait...");
 	}
 	
 	public static void showDialog(String message) {

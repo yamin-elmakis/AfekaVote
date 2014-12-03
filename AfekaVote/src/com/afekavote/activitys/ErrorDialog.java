@@ -49,6 +49,7 @@ public class ErrorDialog extends AlertDialog implements DialogInterface.OnClickL
 	public static void showResponseError(){
 		showError(standartError);
 	}
+	
 	public static void showError(String text){
 		ErrorDialog ed = new ErrorDialog(text);
 		ed.show();

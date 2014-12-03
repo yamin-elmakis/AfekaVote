@@ -3,15 +3,14 @@ package com.afekavote.memory;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.afekavote.application.Program;
-import com.afekavote.objects.User;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import android.R.integer;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
+
+import com.afekavote.application.Program;
+import com.afekavote.objects.User;
+import com.afekavote.utils.Logger;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class MemoryPref {
 
@@ -57,7 +56,7 @@ public class MemoryPref {
 		return get;
 	}
 
-	public void clenAll() {
+	public void clearAll() {
 		editor.clear();
 		editor.commit();
 	}
@@ -68,7 +67,7 @@ public class MemoryPref {
 	    	HashMap.Entry pairs = (HashMap.Entry)it.next();
 	    	String key = appName+"_"+pairs.getKey();
 	    	String value = pairs.getValue().toString();
-	        Log.e(TAG,"saveAppCategories: "+ key + " = " + value);
+	    	Logger.log(TAG,"saveAppCategories: "+ key + " = " + value);
 	        add(key, value);
 //	        it.remove(); // avoids a ConcurrentModificationException
 	    }

@@ -2,7 +2,7 @@
 
 /**
  * File to handle all API requests
- * Accepts GET and POST
+ * Accepts POST requests
  * 
  * Each request will be identified by TAG
  * Response will be JSON data
@@ -23,17 +23,98 @@ if (isset($_POST['tag']) && $_POST['tag'] != '') {
 
     // check for tag type
 	switch ($tag) {
+	
+	case 'get_apps_grades':
+		$year = $_POST['year'];
+		$semester = $_POST['semester'];
+		$class = $_POST['class'];
+		$apps_grades = $db->getAppsGrades($year, $semester, $class);
+		if ($apps_grades){
+			$response["success"] = true;
+			$response['apps_grades'] = $apps_grades;
+			echo json_encode($response);
+		}else{
+			$response["success"] = false;
+			$response["error"] = 2;
+			echo json_encode($response);
+		}
+		break;
+
+	case 'check_status':
+		$year = $_POST['year'];
+		$semester = $_POST['semester'];
+		$class = $_POST['class'];
+		$num_apps_voters = false;
+		$min_voters = false;
+
+		$num_apps = $db->getAppsCount($year, $semester, $class);
+		if ($num_apps){
+			$num_apps_voters = $db->getAppsVotersCount($year, $semester, $class);
+		}
+		if ($num_apps && $num_apps_voters){
+			$min_voters = $db->getMinVoters($year, $semester, $class);
+		}
+		// if we got all the data then build an answer
+		if ($num_apps && $num_apps_voters && $min_voters){
+			$apps_counter = $num_apps_voters[VOTED_APPS_COUNT];
+			$voters_count = $num_apps_voters[VOTERS_COUNT];
+			$isOK = true;
+			// check if each app have at least 1 vote
+			// vote != points. 0 it's a vote too.
+			if ($apps_counter != $num_apps)
+				$isOK = false;
+				
+			// check if anough votes voted yet
+			if ($voters_count < $min_voters)
+				$isOK = false;
+
+			// $response["apps_counter"] = $apps_counter;
+			// $response["voters_count"] = $voters_count;
+			// $response["num_apps"] = $num_apps;
+			// $response["min_voters"] = $min_voters;
+
+			if ($isOK){
+				$response[SUCCESS] = true;
+				$response[VOTERS_COUNT] = $voters_count;
+			}else{
+				$response[SUCCESS] = false;
+				$response["error"] = 3;
+			}
+			echo json_encode($response);
+		}else{
+			$response[SUCCESS] = false;
+			$response["error"] = 2;
+			echo json_encode($response);
+		}
+		break;
+
+	case 'get_min_voters':
+		$year = $_POST['year'];
+		$semester = $_POST['semester'];
+		$class = $_POST['class'];
+		$min_voters = $db->getMinVoters($year, $semester, $class);
+		if ($min_voters){
+			$response["success"] = true;
+			$response["min_voters"] = $min_voters;
+			echo json_encode($response);
+		}else{
+			$response["success"] = false;
+			$response["error"] = 2;
+			echo json_encode($response);
+		}
+		break;
+
 	case 'get_apps_names':
 		$year = $_POST['year'];
 		$semester = $_POST['semester'];
 		$class = $_POST['class'];
 		$apps = $db->getAppsNames($year, $semester, $class);
 		if ($apps){
-			$response["success"] = 1;
+			$response["success"] = true;
 			$response["apps"] = $apps;
 			echo json_encode($response);
 		}else{
-			$response["success"] = 0;
+			$response["success"] = false;
 			$response["error"] = 2;
 			echo json_encode($response);
 		}
@@ -45,11 +126,11 @@ if (isset($_POST['tag']) && $_POST['tag'] != '') {
 		$class = $_POST['class'];
 		$catgs = $db->getCategoriesNames($year, $semester, $class);
 		if ($catgs){
-			$response["success"] = 1;
+			$response["success"] = true;
 			$response["categories"] = $catgs;
 			echo json_encode($response);
 		}else{
-			$response["success"] = 0;
+			$response["success"] = false;
 			$response["error"] = 2;
 			echo json_encode($response);
 		}
@@ -88,11 +169,11 @@ if (isset($_POST['tag']) && $_POST['tag'] != '') {
 		}
 		
 		if ($counter > 0){
-			$response["success"] = 1;
+			$response["success"] = true;
 			$response["counter"] = $counter;
 			echo json_encode($response);
 		} else {
-			$response["success"] = 0;
+			$response["success"] = false;
 			$response["error"] = 2;
 			echo json_encode($response);
 		}
@@ -103,7 +184,7 @@ if (isset($_POST['tag']) && $_POST['tag'] != '') {
 		$user = $db->getUserDetails($user_name);
 		// var_dump($user);
 		if ($user){
-			$response["success"] = 1;
+			$response["success"] = true;
 			// check if the user is artist 
 			// the artist have a different rows
 			if ($user[0] == "artist"){
@@ -114,7 +195,7 @@ if (isset($_POST['tag']) && $_POST['tag'] != '') {
 			} else
 				$response["user_details"] = $user;
 		}else{
-			$response["success"] = 0;
+			$response["success"] = false;
 			$response["error"] = 2;
 		}
 		echo json_encode($response);

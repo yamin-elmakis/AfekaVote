@@ -16,5 +16,8 @@ public interface ClientInterface {
 
 	public boolean getCategoriesApps(Listener<String> listener, ErrorListener err);
 
+	public boolean getAppsGrades(Listener<String> listener);
+
+	public boolean checkStatus(Listener<String> listener);
 	
 }
